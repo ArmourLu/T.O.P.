@@ -1,0 +1,145 @@
+    body {
+    font-family: 'Ubuntu', sans-serif !important;
+    background-color: #e1f4ea !important;
+    }
+
+    .ui-widget {
+    font-family: 'Ubuntu', sans-serif !important;
+    }
+
+    .headertext,
+    .infotext {
+        font-size: 24px;
+    }
+    
+    .headertext {
+        height: 100px;
+        line-height: 100px;
+        color: #396746;
+        vertical-align: middle;
+    }
+    
+    .infotext,
+    .smallinfotext {
+        color: #333333;
+        font-weight: normal;
+    }
+    
+    .smallinfotext {
+    font-size: 20px;
+    }
+
+    .reading,
+    .readingdecimal {
+        color: #333333;
+        font-family: 'Roboto', sans-serif;
+        text-align:  left;
+        display: inline-block;
+    }
+
+    .readingmax {
+        font-size: 80px;
+        width: 88px;
+    }
+
+    .readingmin {
+        font-size: 24px;
+    }
+
+    .readingdecimalmax {
+        font-size: 40px;
+        width: 30px;
+        letter-spacing: -3px;
+    }
+
+    .readingdecimalmin {
+        font-size: 24px;
+    }
+
+    .datamenuresize,
+    .datamenutext {
+        font-size: 24px;
+        color: #cccccc;
+    }
+    .datamenutextmax {
+        height: 110px;
+        line-height: 110px;
+        font-family: 'Roboto', sans-serif;
+    }
+    .datamenutextmin {
+        font-family: 'Roboto', sans-serif;
+    }
+    .datamenuresize {
+        cursor: pointer;
+    }
+    .datamenuresize:hover {
+        color: #2f64c7;
+    }
+    
+    .block-data,
+    .block-info,
+    .block-header {
+        border-radius: 5px;
+        margin-top: 5px;
+        padding: 10px;
+        border: 1px;
+        border-style: solid;
+    }
+    
+    .block-data {
+        background-color: #ffffff;
+        border-color: #dddddd;
+        cursor: n-resize;
+    }
+    
+    .block-data:hover {
+        border-color: #848484;
+        box-shadow:2px 2px 2px rgba(25%, 25%, 40%, 0.5);
+    }
+    .block-info {
+        background-color: #ffffff;
+        border-color: #afb4bf;
+    }
+
+    .block-header {
+        background-color: #ffffff;
+        border-color: #93c39b;
+    }
+    
+    .vcenter {
+        display: inline-block;
+        vertical-align: middle;
+        float: none;
+    }
+
+    #chartdiv {
+        #chartdiv {
+            width: 100%;
+            height: 500px;
+            font-size: 11px;
+        }
+        width: 100%;
+        height: 500px;
+    }
+
+    .loadinggif:before{
+        content: ' ';
+        display: inline-block;
+        vertical-align: middle;
+        height: 500px;
+    }
+
+    .loadinggif img {
+        vertical-align: middle;
+        display: inline-block;
+    }
+
+    .chartnodata {
+        width: 100%;
+        height: 500px;
+        line-height: 500px;
+        vertical-align: middle;
+        font-family: 'Roboto', sans-serif;
+        font-size: 36px;
+        color: #666666;
+    }
