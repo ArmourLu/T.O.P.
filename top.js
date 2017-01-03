@@ -12,30 +12,38 @@ function getUrlParameter(sParam) {
 };
 $(document).ready(function ($) {
     $('[data-toggle="tooltip"]').tooltip();
-    $("#newaccount").submit(function(event){
-        prepare_submit();
-        event.preventDefault();
+    $("#newaccountsubmit").click(function(event){
         var alertresult = [];
-        if($("#newemail").val() == "" || $("#newpassword").val() == "" || $("#newconfirmpassword").val() == ""){
+        var response = grecaptcha.getResponse();
+        
+        if(response.length == 0){
+            prepare_submit();
+            alertresult["Status"] = "error";
+            alertresult["Comment"] = "Please click the recaptcha checkbox or fill in the prompted code if asked.";
+            after_submit(alertresult);
+        }        
+        else if($("#newemail").val() == "" || $("#newpassword").val() == "" || $("#newconfirmpassword").val() == ""){
+            prepare_submit();
             alertresult["Status"] = "error";
             alertresult["Comment"] = "Please enter Email and Password.";
             after_submit(alertresult);
         }
         else if($("#newpassword").val() != $("#newconfirmpassword").val()){
+            prepare_submit();
             alertresult["Status"] = "error";
             alertresult["Comment"] = "Your password and confirmation password do not match.";
             after_submit(alertresult);
         }
         else if($("#newpassword").val().length<6 || $("#newpassword").val().length>20){
+            prepare_submit();
             alertresult["Status"] = "error";
             alertresult["Comment"] = "Password length should be 6-20 characters long.";
             after_submit(alertresult);
         }
         else{
-            $.getJSON("newaccount.php?cmd=add&email="+$("#newemail").val()+"&password="+$("#newpassword").val(),function(alertresult){
-                after_submit(alertresult);
-                $("#newaccount :input").val('');
-            });
+            $(":input").prop('disabled',false);
+            $("#newaccount").submit();
+            
         }
     });
     

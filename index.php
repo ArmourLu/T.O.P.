@@ -1,5 +1,6 @@
 <?php
 include "/var/www/private/top_mysqli.php";
+include "/var/www/private/recaptcha.php";
 
 $sqlstr = "SELECT Value FROM sysinfo where Name='ServiceName'";
 $result = mysqli_query($conni, $sqlstr);
@@ -14,7 +15,7 @@ $ServiceName = $row[0];
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="author" content="Armour Lu, Inventec">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="/top/bootstrap-switch/css/bootstrap3/bootstrap-switch.css">
     <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Roboto:500' rel='stylesheet' type='text/css'>
@@ -30,7 +31,7 @@ $ServiceName = $row[0];
         $.widget.bridge('uibutton', $.ui.button);
         $.widget.bridge('uitooltip', $.ui.tooltip);
     </script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="/top/js/jquery.nicescroll.js"></script>
     <script src="/top/sweetalert/sweetalert.min.js"></script>
     <link rel="stylesheet" type="text/css" href="/top/sweetalert/sweetalert.css">
@@ -42,12 +43,13 @@ $ServiceName = $row[0];
     <script src="/top/amcharts/themes/light.js"></script>
     <script src="/top/amcharts/plugins/export/export.js"></script>
     <script src="/top/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
 <body>
     <div class="container">
-        <div id="alterme" class="block-header infotext text-center"><img src="/top/image/top/logo_small.png"><br><?=$ServiceName?></div>
+    <div class="block-header infotext text-center"><img src="/top/image/top/logo_small.png"><br><?=$ServiceName?> - <a href="#">[Home]</a></div>
         <div class="headertext text-center">Login</div>
-        <div id="alterme" class="block-info">
+        <div class="block-info">
            <form class="form-horizontal" id="login">
                 <div class="row">
                     <div class="col-sm-3 col-lg-4"></div>
@@ -68,20 +70,20 @@ $ServiceName = $row[0];
                 <div class="row">
                     <div class="col-sm-3 col-lg-4"></div>
                     <div class="col-sm-6 col-lg-4 text-center">
-                        <button id="alertsubmit" class="btn btn-primary btn-lg">Login</button>
-                        <button id="alertclear" class="btn btn-default btn-lg">Clear</button>
+                        <button id="loginsubmit" class="btn btn-primary btn-lg">Login</button>
+                        <button id="loginclear" class="btn btn-default btn-lg">Clear</button>
                     </div>
                 </div>
             </form>
         </div>
         <div class="headertext text-center">Create New Account</div>
-        <div id="alterme" class="block-info">
-           <form class="form-horizontal" id="newaccount" method="post">
+        <div class="block-info">
+           <form class="form-horizontal" id="newaccount" action="newaccount.php" method="POST">
                 <div class="row">
                     <div class="col-sm-3 col-lg-4"></div>
                     <div class="col-sm-6 col-lg-4">
                         <label for="newemail" class="smallinfotext">Email address</label>
-                        <input type="email" class="form-control input-lg" id="newemail" placeholder="Email"  title="Only @inventec.com is allowed." data-toggle="tooltip" data-placement="bottom">
+                        <input type="email" class="form-control input-lg" id="newemail" name="email" placeholder="Email"  title="Only @inventec.com is allowed." data-toggle="tooltip" data-placement="bottom">
                     </div>
                 </div>
                 <br/>
@@ -89,7 +91,7 @@ $ServiceName = $row[0];
                     <div class="col-sm-3 col-lg-4"></div>
                     <div class="col-sm-6 col-lg-4">
                         <label for="newpassword" class="smallinfotext">Password</label>
-                        <input type="password" class="form-control input-lg" id="newpassword" placeholder="Password" title="Password length should be 6-20 characters long." data-toggle="tooltip" data-placement="bottom">
+                        <input type="password" class="form-control input-lg" id="newpassword" name="password" placeholder="Password" title="Password length should be 6-20 characters long." data-toggle="tooltip" data-placement="bottom">
                     </div>
                 </div>
                 <br/>
@@ -100,12 +102,19 @@ $ServiceName = $row[0];
                         <input type="password" class="form-control input-lg" id="newconfirmpassword" placeholder="Confirm Password" title="Please enter password again." data-toggle="tooltip" data-placement="bottom">
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-sm-3 col-lg-4"></div>
+                    <div class="col-sm-6 col-lg-4">
+                        <br>
+                        <div class="g-recaptcha" data-sitekey="<?=$recaptcha_Site_key?>"></div>
+                    </div>
+                </div>
                 <br/>
                 <div class="row">
                     <div class="col-sm-3 col-lg-4"></div>
                     <div class="col-sm-6 col-lg-4 text-center">
-                        <button id="alertsubmit" class="btn btn-primary btn-lg">Submit</button>
-                        <button id="alertclear" class="btn btn-default btn-lg">Clear</button>
+                        <button id="newaccountsubmit" class="btn btn-primary btn-lg" type="button">Submit</button>
+                        <button id="newaccountclear" class="btn btn-default btn-lg" type="button">Clear</button>
                     </div>
                 </div>
             </form>

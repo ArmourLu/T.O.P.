@@ -4,17 +4,22 @@ include "/var/www/private/email_hash.php";
 include "/var/www/private/passwd_hash.php";
 include "/var/www/private/gmail.php";
 include "/var/www/html/top/PHPMailer/PHPMailerAutoload.php";
+include "/var/www/private/recaptcha.php";
 
 $whitelist = array("inventec.com");
 
 //Get email
-$email = strtolower($_GET['email']);
+$email = strtolower($_POST['email']);
 
 //Get passwod
-$passwd = strtolower($_GET['password']);
+$passwd = strtolower($_POST['password']);
+
+//Get g-recaptcha-response
+$recaptcha_response = $_POST['g-recaptcha-response'];
 
 //Get command
 $cmd = strtolower($_GET['cmd']);
+if($cmd == "") $cmd = "add";
 
 //Get key
 $key = strtolower($_GET['key']);
@@ -66,7 +71,7 @@ if($cmd == "verify")
         else
         {
             $status = "error";
-            $comment = "Wrong verification code. We can't verify your email address.";
+            $comment = "Wrong verification code. We can't verify your account.";
         }
     }
 }
@@ -108,7 +113,12 @@ elseif($cmd == "remove")
 */
 elseif($cmd == "add")
 {
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    if(!check_reCAPTCHA())
+    {
+        $status = "error";
+        $comment = "Are you a bot? :/";
+    }
+    else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $status = "error";
         $comment = "Your email address is invalid.";
     }
@@ -190,6 +200,7 @@ else
 }
 $returnjson['Status'] = $status;
 $returnjson['Comment'] = $comment;
+
 echo json_encode($returnjson);
 
 function validateEmailDomain($email, $domains) {
@@ -212,31 +223,51 @@ function SendEmail($emailaddr, $mailsubject, $mailbody){
     global $gmail_from;
     global $gmail_fromname;
     
-    $mail= new PHPMailer();     //建立新物件        
-    $mail->IsSMTP();            //設定使用SMTP方式寄信        
-    $mail->SMTPAuth = true;     //設定SMTP需要驗證        
-    $mail->SMTPSecure = "ssl";  // Gmail的SMTP主機需要使用SSL連線   
+    $mail= new PHPMailer();
+    $mail->IsSMTP();
+    $mail->SMTPAuth = true;
+    $mail->SMTPSecure = "ssl";
     //$mail->SMTPDebug = 2;
-    $mail->Host = "smtp.gmail.com"; //Gamil的SMTP主機        
-    $mail->Port = 465;           //Gamil的SMTP主機的SMTP埠位為465埠。        
-    $mail->CharSet = "utf-8";    //設定郵件編碼        
+    $mail->Host = "smtp.gmail.com";
+    $mail->Port = 465;
+    $mail->CharSet = "utf-8";
 
-    $mail->Username = $gmail_username; //設定驗證帳號        
-    $mail->Password = $gmail_password; //設定驗證密碼        
+    $mail->Username = $gmail_username;
+    $mail->Password = $gmail_password;
 
-    $mail->From = $gmail_from; //設定寄件者信箱        
-    $mail->FromName = $gmail_fromname;             //設定寄件者姓名        
+    $mail->From = $gmail_from;
+    $mail->FromName = $gmail_fromname;
 
-    $mail->Subject = $mailsubject; //設定郵件標題        
-    $mail->Body = $mailbody;      //設定郵件內容        
-    $mail->IsHTML(true);                        //設定郵件內容為HTML        
-    $mail->AddAddress($emailaddr, $emailaddr); //設定收件者郵件及名稱        
+    $mail->Subject = $mailsubject;
+    $mail->Body = $mailbody;
+    $mail->IsHTML(true);
+    $mail->AddAddress($emailaddr, $emailaddr);
 
     if(!$mail->Send()) {
         return $mail->ErrorInfo;
-        //return "Error";
     } else {
         return "";
     }    
+};
+
+function check_reCAPTCHA()
+{
+    global $recaptcha_response;
+    global $recaptcha_Secret_key;
+    
+        
+    $url = 'https://www.google.com/recaptcha/api/siteverify';
+    $myvars = 'secret=' . $recaptcha_Secret_key . '&response=' . $recaptcha_response;
+
+    $ch = curl_init( $url );
+    curl_setopt( $ch, CURLOPT_POST, 1);
+    curl_setopt( $ch, CURLOPT_POSTFIELDS, $myvars);
+    curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, 1);
+    curl_setopt( $ch, CURLOPT_HEADER, 0);
+    curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1);
+
+    $response = json_decode(curl_exec( $ch ),true);
+    
+    return $response["success"];
 };
 ?>
