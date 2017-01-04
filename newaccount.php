@@ -3,8 +3,11 @@ include "/var/www/private/top_mysqli.php";
 include "/var/www/private/email_hash.php";
 include "/var/www/private/passwd_hash.php";
 include "/var/www/private/gmail.php";
-include "/var/www/html/top/PHPMailer/PHPMailerAutoload.php";
 include "/var/www/private/recaptcha.php";
+require "/var/www/html/top/vendor/autoload.php";
+
+$recaptcha = new \ReCaptcha\ReCaptcha($recaptcha_Secret_key);
+$resp = $recaptcha->verify($_POST['g-recaptcha-response'], $_SERVER['REMOTE_ADDR']);
 
 $whitelist = array("inventec.com");
 
@@ -113,7 +116,7 @@ elseif($cmd == "remove")
 */
 elseif($cmd == "add")
 {
-    if(!check_reCAPTCHA())
+    if(!$resp->isSuccess())
     {
         $status = "error";
         $comment = "Are you a bot? :/";
@@ -248,26 +251,5 @@ function SendEmail($emailaddr, $mailsubject, $mailbody){
     } else {
         return "";
     }    
-};
-
-function check_reCAPTCHA()
-{
-    global $recaptcha_response;
-    global $recaptcha_Secret_key;
-    
-        
-    $url = 'https://www.google.com/recaptcha/api/siteverify';
-    $myvars = 'secret=' . $recaptcha_Secret_key . '&response=' . $recaptcha_response;
-
-    $ch = curl_init( $url );
-    curl_setopt( $ch, CURLOPT_POST, 1);
-    curl_setopt( $ch, CURLOPT_POSTFIELDS, $myvars);
-    curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, 1);
-    curl_setopt( $ch, CURLOPT_HEADER, 0);
-    curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1);
-
-    $response = json_decode(curl_exec( $ch ),true);
-    
-    return $response["success"];
 };
 ?>
