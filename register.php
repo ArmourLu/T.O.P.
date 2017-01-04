@@ -36,6 +36,7 @@ $ServiceName = $row[0];
     <script src="/top/sweetalert/sweetalert.min.js"></script>
     <link rel="stylesheet" type="text/css" href="/top/sweetalert/sweetalert.css">
     <script src="/top/HoldOn.js/js/HoldOn.js"></script>
+    <script src="register.js"></script>
     <link type="text/css" href="/top/amcharts/plugins/export/export.css" rel="stylesheet">
     <script src="/top/amcharts/amcharts.js"></script>
     <script src="/top/amcharts/serial.js"></script>
@@ -47,6 +48,49 @@ $ServiceName = $row[0];
 <body>
     <div class="container">
         <?php include "home_bar.php"?>
+        <div class="headertext text-center">Register New Account</div>
+        <div class="block-info">
+           <form class="form-horizontal" id="newaccount" action="newaccount.php" method="POST">
+                <div class="row">
+                    <div class="col-sm-3 col-lg-4"></div>
+                    <div class="col-sm-6 col-lg-4">
+                        <label for="newemail" class="smallinfotext">Email address</label>
+                        <input type="email" class="form-control input-lg" id="newemail" name="email" placeholder="Email"  title="Only @inventec.com is allowed." data-toggle="tooltip" data-placement="bottom">
+                    </div>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col-sm-3 col-lg-4"></div>
+                    <div class="col-sm-6 col-lg-4">
+                        <label for="newpassword" class="smallinfotext">Password</label>
+                        <input type="password" class="form-control input-lg" id="newpassword" name="password" placeholder="Password" title="Password length should be 6-20 characters long." data-toggle="tooltip" data-placement="bottom">
+                    </div>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col-sm-3 col-lg-4"></div>
+                    <div class="col-sm-6 col-lg-4">
+                        <label for="newconfirmpassword" class="smallinfotext">Confirm Password</label>
+                        <input type="password" class="form-control input-lg" id="newconfirmpassword" placeholder="Confirm Password" title="Please enter password again." data-toggle="tooltip" data-placement="bottom">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3 col-lg-4"></div>
+                    <div class="col-sm-6 col-lg-4">
+                        <br>
+                        <div class="g-recaptcha" data-sitekey="<?=$recaptcha_Site_key?>"></div>
+                    </div>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col-sm-3 col-lg-4"></div>
+                    <div class="col-sm-6 col-lg-4 text-center">
+                        <button id="newaccountsubmit" class="btn btn-primary btn-lg" type="button">Submit</button>
+                        <button id="newaccountclear" class="btn btn-default btn-lg" type="button">Clear</button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
     <br><br>
 </body>

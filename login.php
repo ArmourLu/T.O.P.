@@ -47,6 +47,41 @@ $ServiceName = $row[0];
 <body>
     <div class="container">
         <?php include "home_bar.php"?>
+        <div class="headertext text-center">Login</div>
+        <div class="block-info">
+           <form class="form-horizontal" id="login" method="get" action="#">
+                <div class="row">
+                    <div class="col-sm-3 col-lg-4"></div>
+                    <div class="col-sm-6 col-lg-4">
+                        <label for="loginemail" class="smallinfotext">Email address</label>
+                        <input type="email" class="form-control input-lg" id="loginemail" placeholder="Email">
+                    </div>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col-sm-3 col-lg-4"></div>
+                    <div class="col-sm-6 col-lg-4">
+                        <label for="loginpassword" class="smallinfotext">Password</label>
+                        <input type="password" class="form-control input-lg" id="loginpassword" placeholder="Password">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3 col-lg-4"></div>
+                    <div class="col-sm-6 col-lg-4">
+                        <br>
+                        <div class="g-recaptcha" data-sitekey="<?=$recaptcha_Site_key?>"></div>
+                    </div>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col-sm-3 col-lg-4"></div>
+                    <div class="col-sm-6 col-lg-4 text-center">
+                        <button id="loginsubmit" class="btn btn-primary btn-lg" type="button">Login</button>
+                        <button id="loginclear" class="btn btn-default btn-lg" type="button">Clear</button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
     <br><br>
 </body>
