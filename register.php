@@ -10,39 +10,12 @@ $ServiceName = $row[0];
 ?>
 <!doctype html>
 <head>
-    <title><?=$ServiceName?></title>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="author" content="Armour Lu, Inventec">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="stylesheet" href="/top/bootstrap-switch/css/bootstrap3/bootstrap-switch.css">
-    <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Roboto:500' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/start/jquery-ui.css">
-    <link rel="stylesheet" href="/top/HoldOn.js/css/HoldOn.css">
-    <link href="/top/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
-    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-    <script src="/top/js/jquery.cookie.js"></script>
-    <script src="/top/bootstrap-switch/js/bootstrap-switch.min.js"></script>
-    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-    <script>
-        /*** Handle jQuery plugin naming conflict between jQuery UI and Bootstrap ***/
-        $.widget.bridge('uibutton', $.ui.button);
-        $.widget.bridge('uitooltip', $.ui.tooltip);
-    </script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    <script src="/top/js/jquery.nicescroll.js"></script>
+<?php include "common_head.php"?>
     <script src="/top/sweetalert/sweetalert.min.js"></script>
     <link rel="stylesheet" type="text/css" href="/top/sweetalert/sweetalert.css">
+    <link rel="stylesheet" href="/top/HoldOn.js/css/HoldOn.css">
     <script src="/top/HoldOn.js/js/HoldOn.js"></script>
     <script src="register.js"></script>
-    <link type="text/css" href="/top/amcharts/plugins/export/export.css" rel="stylesheet">
-    <script src="/top/amcharts/amcharts.js"></script>
-    <script src="/top/amcharts/serial.js"></script>
-    <script src="/top/amcharts/themes/light.js"></script>
-    <script src="/top/amcharts/plugins/export/export.js"></script>
-    <script src="/top/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
     <script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
 <body>
@@ -50,12 +23,12 @@ $ServiceName = $row[0];
         <?php include "home_bar.php"?>
         <div class="headertext text-center">Register New Account</div>
         <div class="block-info">
-           <form class="form-horizontal" id="newaccount" action="newaccount.php" method="POST">
+           <form class="form-horizontal" id="newaccount" action="register2.php" method="POST">
                 <div class="row">
                     <div class="col-sm-3 col-lg-4"></div>
                     <div class="col-sm-6 col-lg-4">
                         <label for="newemail" class="smallinfotext">Email address</label>
-                        <input type="email" class="form-control input-lg" id="newemail" name="email" placeholder="Email"  title="Only @inventec.com is allowed." data-toggle="tooltip" data-placement="bottom">
+                        <input type="email" class="form-control input-lg" id="newemail" name="email" placeholder="Email">
                     </div>
                 </div>
                 <br/>
@@ -63,7 +36,7 @@ $ServiceName = $row[0];
                     <div class="col-sm-3 col-lg-4"></div>
                     <div class="col-sm-6 col-lg-4">
                         <label for="newpassword" class="smallinfotext">Password</label>
-                        <input type="password" class="form-control input-lg" id="newpassword" name="password" placeholder="Password" title="Password length should be 6-20 characters long." data-toggle="tooltip" data-placement="bottom">
+                        <input type="password" class="form-control input-lg" id="newpassword" name="password" placeholder="Password">
                     </div>
                 </div>
                 <br/>
@@ -71,7 +44,7 @@ $ServiceName = $row[0];
                     <div class="col-sm-3 col-lg-4"></div>
                     <div class="col-sm-6 col-lg-4">
                         <label for="newconfirmpassword" class="smallinfotext">Confirm Password</label>
-                        <input type="password" class="form-control input-lg" id="newconfirmpassword" placeholder="Confirm Password" title="Please enter password again." data-toggle="tooltip" data-placement="bottom">
+                        <input type="password" class="form-control input-lg" id="newconfirmpassword" placeholder="Confirm Password">
                     </div>
                 </div>
                 <div class="row">

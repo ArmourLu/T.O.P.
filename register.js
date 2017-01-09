@@ -11,7 +11,7 @@ function getUrlParameter(sParam) {
     }
 };
 $(document).ready(function ($) {
-    $('[data-toggle="tooltip"]').tooltip();
+    //$('[data-toggle="tooltip"]').tooltip();
     $("#newaccountsubmit").click(function(event){
         var alertresult = [];
         var response = grecaptcha.getResponse();
